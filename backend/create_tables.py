@@ -8,3 +8,4 @@ def create():
 if __name__ == "__main__":
     create()
     print("Tables created.")
+    
