@@ -6,7 +6,7 @@ from models import Product, Order
 import logging
 
 app = Flask(__name__)
-CORS(app, origins=["https://www.myfrontenddomain.com", "https://my-frontend-cloudfront.cloudfront.net"])  # set your front-end origin(s)
+CORS(app, origins=["http://front-end-lb-898931571.us-east-1.elb.amazonaws.com"])  # set your front-end origin(s)
 
 logging.basicConfig(level=logging.INFO)
 
