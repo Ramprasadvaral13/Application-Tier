@@ -1,12 +1,26 @@
-# db.py
 import os
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from secrets_helper import get_db_creds_from_env_or_dict
 
-_creds = get_db_creds_from_env_or_dict()
-DB_URL = f"mysql+pymysql://{_creds['user']}:{_creds['password']}@{_creds['host']}:{_creds['port']}/{_creds['db']}?charset=utf8mb4"
+load_dotenv()  # This loads .env automatically
 
-# Pool settings for production-ish
-engine = create_engine(DB_URL, pool_size=10, max_overflow=20, pool_recycle=3600, pool_pre_ping=True)
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = os.getenv("DB_PORT")
+DB_NAME = os.getenv("DB_NAME")
+
+if not all([DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME]):
+    raise ValueError("Database credentials are not set properly in environment variables")
+
+DB_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}?charset=utf8mb4"
+
+engine = create_engine(
+    DB_URL,
+    pool_size=10,
+    max_overflow=20,
+    pool_recycle=3600,
+    pool_pre_ping=True
+)
 SessionLocal = sessionmaker(bind=engine)
